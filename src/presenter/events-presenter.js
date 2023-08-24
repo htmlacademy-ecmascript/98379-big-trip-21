@@ -1,8 +1,9 @@
-import EditPointView from '../view/edit-point-form.js';
-import PointView from '../view/point-view.js';
-import SortView from '../view/sort-view.js';
-import EventsList from '../view/events-list.js';
-import NewPointView from '../view/new-point-form.js';
+import SortView from '../view/main-sort-view.js';
+import EventsList from '../view/main-events-list-view.js';
+
+import PointView from '../view/list-point-view.js';
+import NewPointView from '../view/list-new-point-form-view.js';
+import EditPointView from '../view/list-edit-point-form.js';
 
 import {render} from '../render.js';
 
@@ -14,13 +15,13 @@ export default class EventsPresenter {
   }
 
   init() {
-    render(new PointView(44), this.eventsListComponent.getElement());
     render(new SortView(), this.eventsContainer);
     render(this.eventsListComponent, this.eventsContainer);
-    render(new NewPointView(), this.eventsListComponent.getElement());
     render(new PointView(), this.eventsListComponent.getElement());
     render(new EditPointView(), this.eventsListComponent.getElement());
-
-    render(new PointView(3), this.eventsListComponent.getElement());
+    render(new NewPointView(), this.eventsListComponent.getElement());
+    for(let i = 2; i >= 0; i--) {
+      render(new PointView(), this.eventsListComponent.getElement());
+    }
   }
 }
