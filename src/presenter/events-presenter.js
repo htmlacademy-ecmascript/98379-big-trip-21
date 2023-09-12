@@ -2,10 +2,10 @@ import SortView from '../view/main-sort-view.js';
 import EventsList from '../view/main-events-list-view.js';
 
 import PointView from '../view/list-point-view.js';
-import NewPointView from '../view/list-new-point-form-view.js';
+//import NewPointView from '../view/list-new-point-form-view.js';
 import EditPointView from '../view/list-edit-point-form.js';
 
-import DestinationsModel from '../model/destinations-model.js';
+//import DestinationsModel from '../model/destinations-model.js';
 
 
 import {render} from '../render.js';
