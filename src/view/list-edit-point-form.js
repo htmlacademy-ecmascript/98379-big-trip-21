@@ -1,4 +1,5 @@
 import {createElement} from '../render.js';
+import {POINT_EMPTY} from '../mock/const.js';
 
 function createEditPointFormTemplate() {
   return `<li class="trip-events__item">
@@ -139,8 +140,18 @@ function createEditPointFormTemplate() {
 }
 
 export default class EditPointView {
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers}) {
+    this.point = point;
+    this.pointOffers = pointOffers;
+    this.pointDestinations = pointDestinations;
+  }
+
   getTemplate() {
-    return createEditPointFormTemplate();
+    return createEditPointFormTemplate({
+      point: this.point,
+      pointDestinations: this.pointDestinations,
+      pointOffers: this.pointOffers
+    });
   }
 
   getElement() {
