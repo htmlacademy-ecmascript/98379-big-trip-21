@@ -1,15 +1,11 @@
 import dayjs from 'dayjs';
 import {DURATION} from './const.js';
 
-const getRandomInteger = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  if (min > max || min < 0 || max < 0) {
-    return NaN;
-  }
-
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+function getRandomInteger(a = 0, b = 1) {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+  return Math.floor(lower + Math.random() * (upper - lower + 1));
+}
 
 function getRandomValue(items) {
   return items[getRandomInteger(0, items.length - 1)];

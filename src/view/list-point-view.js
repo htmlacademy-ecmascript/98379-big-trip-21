@@ -1,13 +1,15 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-function createPointTemplate() {
+function createPointTemplate(item) {
+  const {point} = item;
+
   return `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="2019-03-18">MAR 18</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/check-in.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">Check-in Chamonix</h3>
+        <h3 class="event__title">${point.type} </h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T12:25">16:20</time>
@@ -17,7 +19,7 @@ function createPointTemplate() {
           <p class="event__duration">40M</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">600</span>
+          &euro;&nbsp;<span class="event__price-value">${point.basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
@@ -40,24 +42,30 @@ function createPointTemplate() {
     </li>`;
 }
 
-export default class PointView {
-  constructor(count) {
-    this.count = count === undefined ? 1 : count;
+
+export default class PointView extends AbstractView {
+  //#point = null;
+
+  constructor({point, pointDestinations, pointOffers, onEditClick}) {
+    super();
+    this.point = point;
+    this.pointDestinations = pointDestinations;
+    this.pointOffers = pointOffers;
+    this.onEditClick = onEditClick;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.pointEditClickHandler);
   }
 
-  getTemplate() {
-    return createPointTemplate();
+  get template() {
+    return createPointTemplate({
+      point: this.point,
+      pointDestinations: this.pointDestinations,
+      pointOffers: this.pointOffers
+    });
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  pointEditClickHandler = (evt) => {
+    evt.preventDefault();
+    this.onEditClick();
+  };
 }
+

@@ -6,7 +6,8 @@ import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import PointsModel from './model/points-model.js';
 
-import {render, RenderPosition} from './render.js';
+
+import {render, RenderPosition} from './framework/render.js';
 
 import EventsPresenter from './presenter/events-presenter.js';
 
@@ -27,8 +28,8 @@ const eventsPresenter = new EventsPresenter({
   pointsModel
 });
 
-render(new HeaderFilters(), siteFiltersElement);
 render(new HeaderTripInfo(), siteTripMainElement, RenderPosition.AFTERBEGIN);
+render(new HeaderFilters(), siteFiltersElement);
 
 
 eventsPresenter.init();

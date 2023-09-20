@@ -1,7 +1,21 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {POINT_EMPTY} from '../mock/const.js';
 
-function createEditPointFormTemplate() {
+function returnDestinations(pointDestinations) {
+  const destinationArray = [];
+  let destinationList = '';
+  for (const object of pointDestinations) {
+    destinationArray.push(object.name);
+  }
+  for(let i = 0; i < destinationArray.length; i++) {
+    destinationList += `<option value="${destinationArray[i]}"></option>`;
+  }
+  return destinationList;
+}
+
+function createEditPointFormTemplate(item) {
+  const {point, pointDestinations} = item;
+  //console.log(pointOffers);
   return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -55,13 +69,11 @@ function createEditPointFormTemplate() {
       </div>
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          Flight
+          ${point.type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointDestinations[0].name}" list="destination-list-1">
         <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
+          ${returnDestinations(pointDestinations)}
         </datalist>
       </div>
       <div class="event__field-group  event__field-group--time">
@@ -76,7 +88,7 @@ function createEditPointFormTemplate() {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.basePrice}">
       </div>
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
       <button class="event__reset-btn" type="reset">Delete</button>
@@ -93,7 +105,7 @@ function createEditPointFormTemplate() {
             <label class="event__offer-label" for="event-offer-luggage-1">
               <span class="event__offer-title">Add luggage</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">50</span>
+              <span class="event__offer-price">${point.basePrice}</span>
             </label>
           </div>
           <div class="event__offer-selector">
@@ -139,14 +151,19 @@ function createEditPointFormTemplate() {
   </li>`;
 }
 
-export default class EditPointView {
-  constructor({point = POINT_EMPTY, pointDestinations, pointOffers}) {
+export default class EditPointView extends AbstractView {
+  // #point = null;
+
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onResetClick}) {
+    super();
     this.point = point;
-    this.pointOffers = pointOffers;
     this.pointDestinations = pointDestinations;
+    this.pointOffers = pointOffers;
+    this.onResetClick = onResetClick;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.resetButtonClickHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createEditPointFormTemplate({
       point: this.point,
       pointDestinations: this.pointDestinations,
@@ -154,15 +171,8 @@ export default class EditPointView {
     });
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  resetButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.onResetClick();
+  };
 }
