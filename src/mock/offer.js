@@ -4,7 +4,7 @@ import {PRICE} from './const.js';
 function generateOffer(type) {
   return {
     id: crypto.randomUUID(),
-    title: `Offer ${type}`,
+    offers: `Offer ${type}`,
     price: getRandomInteger(PRICE.MIN, (PRICE.MAX / 10))
   };
 }

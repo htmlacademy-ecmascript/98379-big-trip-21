@@ -2,54 +2,75 @@ import SortView from '../view/main-sort-view.js';
 import EventsList from '../view/main-events-list-view.js';
 
 import PointView from '../view/list-point-view.js';
-//import NewPointView from '../view/list-new-point-form-view.js';
 import EditPointView from '../view/list-edit-point-form.js';
 
-//import DestinationsModel from '../model/destinations-model.js';
+//import NewPointView from '../view/list-new-point-form-view.js';
 
-
-import {render} from '../render.js';
+import { render, replace } from '../framework/render.js';
 
 export default class EventsPresenter {
   sortComponent = new SortView();
   eventsListComponent = new EventsList();
 
-  constructor({container, destinationModel, offersModel, pointsModel}) {
+  constructor({ container, destinationsModel, offersModel, pointsModel }) {
     this.container = container;
-    this.destinationModel = destinationModel;
+    this.destinationsModel = destinationsModel;
     this.offersModel = offersModel;
     this.pointsModel = pointsModel;
 
-  // this.points = [...pointsModel.get()];
+    this.points = [...pointsModel.get()];
   }
 
   init() {
     render(this.sortComponent, this.container);
     render(this.eventsListComponent, this.container);
 
-    render(
-      new EditPointView({
-        points: this.points[0],
-        pointsDestinations: this.destinationsModel.get(),
-        pointOffers: this.offersModel.get()
-      }),
-      this.eventsListComponent.getElement()
-    );
     this.points.forEach((point) => {
-      render(
-        new PointView({
-          point,
-          pointsDestination: this.destinationsModel.getById(point.detination),
-          pointOffer: this.offersModel.getByType(point.type)
-        }),
-        this.eventsListComponent.getElement()
-      );
+      this.renderPoint(point);
     });
-    // render(new PointView(), this.eventsListComponent.getElement());
-    // render(new EditPointView(), this.eventsListComponent.getElement());
-    // render(new NewPointView(), this.eventsListComponent.getElement());
-    // for(let i = 2; i >= 0; i--) {
-    //   render(new PointView(), this.eventsListComponent.getElement());
-    // }
   }
+
+  renderPoint = (point) => {
+    const pointComponent = new PointView({
+      point,
+      pointsDestination: this.destinationsModel.getById(point.destination),
+      pointOffer: this.offersModel.getByType(point.type),
+      onEditClick: pointEditClickHandler
+    });
+
+    const pointEditComponent = new EditPointView({
+      point,
+      pointDestinations: this.destinationsModel.get(),
+      pointOffers: this.offersModel.get(),
+      onResetClick: resetButtonClickHandler
+    });
+
+    const replaceFormToPoint = () => {
+      replace(pointComponent, pointEditComponent);
+    };
+
+    const replacePointToForm = () => {
+      replace(pointEditComponent, pointComponent);
+    };
+
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+
+    function pointEditClickHandler() {
+      replacePointToForm();
+      document.addEventListener('keydown', escKeyDownHandler);
+    }
+
+    function resetButtonClickHandler() {
+      replaceFormToPoint();
+      document.addEventListener('keydown', escKeyDownHandler);
+    }
+
+    render(pointComponent, this.eventsListComponent.element);
+  };
 }
