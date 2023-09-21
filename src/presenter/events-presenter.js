@@ -3,6 +3,7 @@ import EventsList from '../view/main-events-list-view.js';
 
 import PointView from '../view/list-point-view.js';
 import EditPointView from '../view/list-edit-point-form.js';
+import EmptyList from '../view/list-empty.js';
 
 //import NewPointView from '../view/list-new-point-form-view.js';
 
@@ -11,6 +12,8 @@ import { render, replace } from '../framework/render.js';
 export default class EventsPresenter {
   sortComponent = new SortView();
   eventsListComponent = new EventsList();
+  emptyComponent = new EmptyList();
+
 
   constructor({ container, destinationsModel, offersModel, pointsModel }) {
     this.container = container;
@@ -21,10 +24,14 @@ export default class EventsPresenter {
     this.points = [...pointsModel.get()];
   }
 
-  init() {
-    render(this.sortComponent, this.container);
-    render(this.eventsListComponent, this.container);
 
+  init() {
+    if(this.points.length === 0) {
+      render(this.emptyComponent, this.container);
+    } else {
+      render(this.sortComponent, this.container);
+      render(this.eventsListComponent, this.container);
+    }
     this.points.forEach((point) => {
       this.renderPoint(point);
     });
@@ -33,8 +40,8 @@ export default class EventsPresenter {
   renderPoint = (point) => {
     const pointComponent = new PointView({
       point,
-      pointsDestination: this.destinationsModel.getById(point.destination),
-      pointOffer: this.offersModel.getByType(point.type),
+      pointDestinations: this.destinationsModel.getById(point.destination),
+      pointOffers: this.offersModel.getByType(point.type),
       onEditClick: pointEditClickHandler
     });
 

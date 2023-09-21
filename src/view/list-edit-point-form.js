@@ -15,7 +15,6 @@ function returnDestinations(pointDestinations) {
 
 function createEditPointFormTemplate(item) {
   const {point, pointDestinations} = item;
-  //console.log(pointOffers);
   return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -105,7 +104,7 @@ function createEditPointFormTemplate(item) {
             <label class="event__offer-label" for="event-offer-luggage-1">
               <span class="event__offer-title">Add luggage</span>
               &plus;&euro;&nbsp;
-              <span class="event__offer-price">${point.basePrice}</span>
+              <span class="event__offer-price">40</span>
             </label>
           </div>
           <div class="event__offer-selector">
