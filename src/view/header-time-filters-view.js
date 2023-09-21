@@ -6,7 +6,6 @@ function createFilterTemplate() {
           <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything">
           <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
         </div>
-
         <div class="trip-filters__filter">
           <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
           <label class="trip-filters__filter-label" for="filter-future">Future</label>
@@ -27,7 +26,22 @@ function createFilterTemplate() {
 }
 
 export default class HeaderFilters extends AbstractView {
+
+  constructor() {
+    super();
+    this.element.querySelectorAll('.trip-filters__filter-input').forEach((e) => e.addEventListener('click', this.pointEditClickHandler));
+  }
+
   get template() {
     return createFilterTemplate();
+  }
+
+  // pointEditClickHandler = (evt) => {
+  //   //debugger;
+  //   return evt;
+  // };
+
+  get filter() {
+    return this.pointEditClickHandler();
   }
 }
