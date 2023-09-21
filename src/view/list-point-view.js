@@ -1,15 +1,35 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import {POINT_EMPTY} from '../mock/const.js';
+
+function returnOffers(pointOffers) {
+  const offersTitle = [];
+  const offersPrice = [];
+  let offersList = '';
+
+  for (const object of pointOffers) {
+    offersTitle.push(object.offers);
+    offersPrice.push(object.price);
+  }
+  for(let i = 0; i < offersTitle.length; i++) {
+    offersList += `<li class="event__offer">
+    <span class="event__offer-title">${offersTitle[i]}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${offersPrice[i]}</span>
+  </li>`;
+  }
+  return offersList;
+}
+
 
 function createPointTemplate(item) {
-  const {point} = item;
-
+  const {point, pointDestinations, pointOffers} = item;
   return `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="2019-03-18">MAR 18</time>
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/check-in.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${point.type} </h3>
+        <h3 class="event__title">${point.type} ${pointDestinations.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T12:25">16:20</time>
@@ -23,11 +43,7 @@ function createPointTemplate(item) {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Add breakfast</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">50</span>
-          </li>
+        ${returnOffers(pointOffers)}
         </ul>
         <button class="event__favorite-btn event__favorite-btn--active" type="button">
           <span class="visually-hidden">Add to favorite</span>
@@ -46,7 +62,7 @@ function createPointTemplate(item) {
 export default class PointView extends AbstractView {
   //#point = null;
 
-  constructor({point, pointDestinations, pointOffers, onEditClick}) {
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onEditClick}) {
     super();
     this.point = point;
     this.pointDestinations = pointDestinations;
