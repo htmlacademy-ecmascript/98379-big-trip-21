@@ -1,23 +1,22 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {POINT_EMPTY} from '../mock/const.js';
+import {formatStringToShortDate, formatStringToDate, formatStringToDateTime, formatStringToTime, getPointDuration} from '../utils/point.js';
 
 function returnOffers(pointOffers) {
   const offersTitle = [];
   const offersPrice = [];
-  let offersList = '';
 
   for (const object of pointOffers) {
     offersTitle.push(object.offers);
     offersPrice.push(object.price);
   }
-  for(let i = 0; i < offersTitle.length; i++) {
-    offersList += `<li class="event__offer">
-    <span class="event__offer-title">${offersTitle[i]}</span>
+
+  return offersTitle.map((element, index) =>
+    `<li class="event__offer">
+    <span class="event__offer-title">${element}</span>
     &plus;&euro;&nbsp;
-    <span class="event__offer-price">${offersPrice[i]}</span>
-  </li>`;
-  }
-  return offersList;
+    <span class="event__offer-price">${offersPrice[index]}</span>
+    </li>`).join(' ');
 }
 
 
@@ -25,18 +24,18 @@ function createPointTemplate(item) {
   const {point, pointDestinations, pointOffers} = item;
   return `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="2019-03-18">MAR 18</time>
+        <time class="event__date" datetime="${formatStringToDate(point.dateFrom)}">${formatStringToShortDate(point.dateFrom).toUpperCase()}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${point.type.toLowerCase()}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${point.type} ${pointDestinations.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T12:25">16:20</time>
+            <time class="event__start-time" datetime="${formatStringToDateTime(point.dateFrom)}">${formatStringToTime(point.dateFrom)}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T13:35">17:00</time>
+            <time class="event__end-time" datetime="${formatStringToDateTime(point.dateTo)}">${formatStringToTime(point.dateTo)}</time>
           </p>
-          <p class="event__duration">40M</p>
+          <p class="event__duration">${getPointDuration(point.dateFrom, point.dateTo)}</p>
         </div>
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${point.basePrice}</span>
