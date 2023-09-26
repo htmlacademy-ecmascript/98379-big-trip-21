@@ -10,46 +10,57 @@ import EmptyList from '../view/list-empty.js';
 import { render, replace } from '../framework/render.js';
 
 export default class EventsPresenter {
-  sortComponent = new SortView();
-  eventsListComponent = new EventsList();
-  emptyComponent = new EmptyList();
+  #sortComponent = new SortView();
+  #eventsListComponent = new EventsList();
+  #emptyComponent = new EmptyList();
+
+  #container = null;
+
+  #destinationsModel = null;
+  #offersModel = null;
+  #pointsModel = null;
+
+  #points = [];
 
 
-  constructor({ container, destinationsModel, offersModel, pointsModel }) {
-    this.container = container;
-    this.destinationsModel = destinationsModel;
-    this.offersModel = offersModel;
-    this.pointsModel = pointsModel;
+  constructor({container, destinationsModel, offersModel, pointsModel}) {
+    this.#container = container;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
+    this.#pointsModel = pointsModel;
 
-    this.points = [...pointsModel.get()];
+    this.#points = [...this.#pointsModel.get()];
   }
 
 
   init() {
-    if(this.points.length === 0) {
-      render(this.emptyComponent, this.container);
-    } else {
-      render(this.sortComponent, this.container);
-      render(this.eventsListComponent, this.container);
+    if(this.#points.length === 0) {
+      render(this.#emptyComponent, this.#container);
+      return;
     }
-    this.points.forEach((point) => {
-      this.renderPoint(point);
+
+    render(this.#sortComponent, this.#container);
+    render(this.#eventsListComponent, this.#container);
+
+    this.#points.forEach((point) => {
+      this.#renderPoint(point);
     });
   }
 
-  renderPoint = (point) => {
+  #renderPoint = (point) => {
     const pointComponent = new PointView({
       point,
-      pointDestinations: this.destinationsModel.getById(point.destination),
-      pointOffers: this.offersModel.getByType(point.type),
+      pointDestinations: this.#destinationsModel.getById(point.destination),
+      pointOffers: this.#offersModel.getByType(point.type),
       onEditClick: pointEditClickHandler
     });
 
     const pointEditComponent = new EditPointView({
       point,
-      pointDestinations: this.destinationsModel.get(),
-      pointOffers: this.offersModel.get(),
-      onResetClick: resetButtonClickHandler
+      pointDestinations: this.#destinationsModel.get(),
+      pointOffers: this.#offersModel.get(),
+      onResetClick: resetButtonClickHandler,
+      onSubmitClick: pointSubmitHandler
     });
 
     const replaceFormToPoint = () => {
@@ -78,6 +89,11 @@ export default class EventsPresenter {
       document.addEventListener('keydown', escKeyDownHandler);
     }
 
-    render(pointComponent, this.eventsListComponent.element);
+    function pointSubmitHandler() {
+      replaceFormToPoint();
+      document.removeEventListener('keydown', escKeyDownHandler);
+    }
+
+    render(pointComponent, this.#eventsListComponent.element);
   };
 }

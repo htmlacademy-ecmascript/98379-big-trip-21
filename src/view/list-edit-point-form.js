@@ -130,27 +130,44 @@ function createEditPointFormTemplate(item) {
 }
 
 export default class EditPointView extends AbstractView {
-  // #point = null;
+  #point = null;
+  #pointDestinations = null;
+  #pointOffers = null;
+  #onResetClick = null;
+  #onSubmitClick = null;
 
-  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onResetClick}) {
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onResetClick, onSubmitClick}) {
     super();
-    this.point = point;
-    this.pointDestinations = pointDestinations;
-    this.pointOffers = pointOffers;
-    this.onResetClick = onResetClick;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.resetButtonClickHandler);
+    this.#point = point;
+    this.#pointDestinations = pointDestinations;
+    this.#pointOffers = pointOffers;
+    this.#onResetClick = onResetClick;
+    this.#onSubmitClick = onSubmitClick;
+
+    this.element
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#resetButtonClickHandler);
+
+    this.element
+      .querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
     return createEditPointFormTemplate({
-      point: this.point,
-      pointDestinations: this.pointDestinations,
-      pointOffers: this.pointOffers
+      point: this.#point,
+      pointDestinations: this.#pointDestinations,
+      pointOffers: this.#pointOffers
     });
   }
 
-  resetButtonClickHandler = (evt) => {
+  #resetButtonClickHandler = (evt) => {
     evt.preventDefault();
-    this.onResetClick();
+    this.#onResetClick();
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitClick();
   };
 }
