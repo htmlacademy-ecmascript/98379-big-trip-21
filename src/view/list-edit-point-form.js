@@ -8,13 +8,13 @@ function createDestinationsList(pointDestinations) {
   for (const object of pointDestinations) {
     destinationArray.push(object.name);
   }
-  return destinationArray.map((element) => `<option value="${element}"></option>`).join(' ');
+  return destinationArray.map((destination) => `<option value="${destination}"></option>`).join(' ');
 }
 
 function returnCurrentPointDataById(point, pointDestinations, data) {
-  for (const item of pointDestinations) {
-    if(item.id === point.destination) {
-      return item[`${data}`];
+  for (const pointDestination of pointDestinations) {
+    if(pointDestination.id === point.destination) {
+      return pointDestination[data];
     }
   }
 }
