@@ -56,4 +56,12 @@ const Duration = {
   MIN: 59
 };
 
-export {POINT_EMPTY, OFFER_COUNT, DEFAULT_TYPE, POINT_COUNT, DESTINATION_COUNT, CITIES, DESCRIPTION, Price, Duration, TYPES};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
+
+export {POINT_EMPTY, OFFER_COUNT, DEFAULT_TYPE, POINT_COUNT, DESTINATION_COUNT, CITIES, DESCRIPTION, Price, Duration, TYPES, FilterType};
