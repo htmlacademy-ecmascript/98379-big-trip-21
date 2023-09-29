@@ -25,11 +25,11 @@ const TYPES = [
   'Restaurant'
 ];
 
-const DESTINATION_COUNT = 2;
+const DESTINATION_COUNT = 3;
 
-const POINT_COUNT = 2;
+const POINT_COUNT = 3;
 
-const OFFER_COUNT = 2;
+const OFFER_COUNT = 3;
 
 const DEFAULT_TYPE = 'flight';
 

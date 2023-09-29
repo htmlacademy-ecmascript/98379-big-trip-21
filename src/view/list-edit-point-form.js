@@ -117,7 +117,7 @@ function createEditPointFormTemplate(item) {
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-          ${createCurrentOffers (point, pointOffers)};
+          ${createCurrentOffers (point, pointOffers)}
         </div>
       </section>
       <section class="event__section  event__section--destination">
