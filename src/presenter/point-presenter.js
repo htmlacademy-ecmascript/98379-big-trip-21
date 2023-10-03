@@ -3,7 +3,7 @@ import TripEventEditView from '../view/trip-event-edit.js';
 import {replace, render, remove} from '../framework/render.js';
 import {Mode, UpdateType, UserAction} from '../constants/constants.js';
 
-export default class PointPresentor {
+export default class PointPresenter {
   #tripEventListComponent = null;
   #tripEventViewComponent = null;
   #tripEventViewEditComponent = null;

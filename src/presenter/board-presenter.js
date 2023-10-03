@@ -3,11 +3,11 @@ import TripEventInfoView from '../view/trip-info.js';
 import TripEventSortView from '../view/trip-sort.js';
 import {remove, render, RenderPosition} from '../framework/render.js';
 import TripEventNoPointView from '../view/trip-no-point.js';
-import PointPresentor from './point-presentor.js';
+import PointPresenter from './point-presenter.js';
 import {sort} from '../utils/sort.js';
 import {filter} from '../utils/filter.js';
 import {FilterTypes, SortTypes, UpdateType, UserAction} from '../constants/constants.js';
-import NewPointPresentor from './new-point-presentor.js';
+import NewPointPresenter from './new-point-presenter.js';
 import TripEventNewButton from '../view/trip-event-new-button.js';
 import TripEvevntMessageView from '../view/trip-event-message-view.js';
 import TripEventLoadingComponent from '../view/trip-event-loading-view.js';
@@ -18,7 +18,7 @@ const TimeLimit = {
   UPPER_LIMIT: 1000
 };
 
-export default class BoardPresentor {
+export default class BoardPresenter {
   #tripMainContainer = null;
   #tripEventsContainer = null;
 
@@ -225,7 +225,7 @@ export default class BoardPresentor {
 
   #renderPoints(points) {
     points.forEach((point) => {
-      const pointPresentor = new PointPresentor({
+      const pointPresentor = new PointPresenter({
         tripEventListComponent: this.#tripEventListComponent.element,
         destinationsModel: this.#destinationsModel,
         offersModel: this.#offersModel,
@@ -244,7 +244,7 @@ export default class BoardPresentor {
   }
 
   #renderNewPoint() {
-    this.#newPointPresentor = new NewPointPresentor({
+    this.#newPointPresentor = new NewPointPresenter({
       buttonContainer: this.#tripMainContainer,
       container: this.#tripEventListComponent.element,
       destinationsModel: this.#destinationsModel,

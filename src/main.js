@@ -1,38 +1,51 @@
-import HeaderTripInfo from './view/header-trip-info-view.js';
-//mport HeaderFilters from './view/header-time-filters-view.js';
-
-import MockService from './service/mock-service.js';
+import FilterPresentor from './presenter/filter-presenter.js';
+import BoardPresentor from './presenter/board-presenter.js';
+import PointService from './service/point-api-service.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
 import PointsModel from './model/points-model.js';
+import FilterModel from './model/filter-model.js';
 
-//import {generateFilter} from './mock/filter';
 
-import {render, RenderPosition} from './framework/render.js';
+const tripMainContainer = document.querySelector('.trip-main');
+const tripEventsContainer = document.querySelector('.trip-events');
+const tripFilterContainer = document.querySelector('.trip-controls__filters');
 
-import EventsPresenter from './presenter/events-presenter.js';
-import FilterPresenter from './presenter/filter-presenter.js';
+const AVTORIZATION = 'Basic 45tdf89bg57hfuyfgb';
+const END_POINT = 'https://20.ecmascript.pages.academy/big-trip';
 
-const siteFiltersElement = document.querySelector('.trip-controls__filters');
-const siteTripMainElement = document.querySelector('.trip-main');
-const siteMainElement = document.querySelector('.trip-events');
+const pointApiService = new PointService(END_POINT, AVTORIZATION);
 
-const mockService = new MockService();
-const destinationsModel = new DestinationsModel(mockService);
-const offersModel = new OffersModel(mockService);
-const pointsModel = new PointsModel(mockService);
-
-const eventsPresenter = new EventsPresenter({
-  container: siteMainElement,
+const destinationsModel = new DestinationsModel({
+  service:  pointApiService
+});
+const offersModel = new OffersModel({
+  service:  pointApiService
+});
+const pointsModel = new PointsModel({
+  service:  pointApiService,
   destinationsModel,
-  offersModel,
-  pointsModel
+  offersModel
 });
 
+const filterModel = new FilterModel();
 
-const filterPresenter = new FilterPresenter({container: siteFiltersElement, pointsModel});
+const filterPresentor = new FilterPresentor({
+  container: tripFilterContainer,
+  pointsModel,
+  filterModel,
 
-render(new HeaderTripInfo(), siteTripMainElement, RenderPosition.AFTERBEGIN);
+});
 
-eventsPresenter.init();
-filterPresenter.init();
+const boardPresentor = new BoardPresentor({
+  tripMainContainer,
+  tripEventsContainer,
+  destinationsModel,
+  offersModel,
+  pointsModel,
+  filterModel,
+});
+
+pointsModel.init();
+filterPresentor.init();
+boardPresentor.init();
