@@ -7,6 +7,12 @@ const Metod = {
   DELETE: 'DELETE'
 };
 
+const ApiUrl = {
+  POINTS: 'points',
+  DESTINATIONS: 'destinations',
+  OFFERS: 'offers',
+};
+
 export default class PointService extends ApiService {
   get destinations() {
     return this._load({url: 'destinations'})
@@ -25,7 +31,7 @@ export default class PointService extends ApiService {
 
   async updatePoint(point) {
     const response = await this._load({
-      url: `points/${point.id}`,
+      url: `${ApiUrl.POINTS}/${point.id}`,
       method: Metod.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers:new Headers({'Content-Type': 'application/json'}),
@@ -37,7 +43,7 @@ export default class PointService extends ApiService {
 
   async addPoints(point) {
     const response = await this._load({
-      url: 'points',
+      url: `${ApiUrl.POINTS}`,
       method: Metod.POST,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
@@ -48,7 +54,7 @@ export default class PointService extends ApiService {
 
   async deletePoint(point) {
     const response = await this._load({
-      url: `points/${point.id}`,
+      url: `${ApiUrl.POINTS}/${point.id}`,
       method: Metod.DELETE
     });
 
