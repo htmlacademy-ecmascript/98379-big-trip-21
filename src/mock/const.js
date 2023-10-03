@@ -25,11 +25,11 @@ const TYPES = [
   'Restaurant'
 ];
 
-const DESTINATION_COUNT = 2;
+const DESTINATION_COUNT = 3;
 
-const POINT_COUNT = 2;
+const POINT_COUNT = 3;
 
-const OFFER_COUNT = 2;
+const OFFER_COUNT = 3;
 
 const DEFAULT_TYPE = 'flight';
 
@@ -56,4 +56,12 @@ const Duration = {
   MIN: 59
 };
 
-export {POINT_EMPTY, OFFER_COUNT, DEFAULT_TYPE, POINT_COUNT, DESTINATION_COUNT, CITIES, DESCRIPTION, Price, Duration, TYPES};
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
+};
+
+
+export {POINT_EMPTY, OFFER_COUNT, DEFAULT_TYPE, POINT_COUNT, DESTINATION_COUNT, CITIES, DESCRIPTION, Price, Duration, TYPES, FilterType};

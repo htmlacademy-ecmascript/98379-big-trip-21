@@ -1,6 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createFilterTemplate() {
+  //const {type, isAvailability} = filter;
+  //console.log(filter);
   return `<form class="trip-filters" action="#" method="get">
         <div class="trip-filters__filter">
           <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked>
@@ -26,22 +28,14 @@ function createFilterTemplate() {
 }
 
 export default class HeaderFilters extends AbstractView {
+  #filters = [];
 
-  constructor() {
+  constructor(filters) {
     super();
-    this.element.querySelectorAll('.trip-filters__filter-input').forEach((e) => e.addEventListener('click', this.pointEditClickHandler));
+    this.#filters = filters;
   }
 
   get template() {
-    return createFilterTemplate();
-  }
-
-  // pointEditClickHandler = (evt) => {
-  //   //debugger;
-  //   return evt;
-  // };
-
-  get filter() {
-    return this.pointEditClickHandler();
+    return createFilterTemplate({filters: this.#filters});
   }
 }

@@ -8,13 +8,13 @@ function createDestinationsList(pointDestinations) {
   for (const object of pointDestinations) {
     destinationArray.push(object.name);
   }
-  return destinationArray.map((element) => `<option value="${element}"></option>`).join(' ');
+  return destinationArray.map((destination) => `<option value="${destination}"></option>`).join(' ');
 }
 
 function returnCurrentPointDataById(point, pointDestinations, data) {
-  for (const item of pointDestinations) {
-    if(item.id === point.destination) {
-      return item[`${data}`];
+  for (const pointDestination of pointDestinations) {
+    if(pointDestination.id === point.destination) {
+      return pointDestination[data];
     }
   }
 }
@@ -117,7 +117,7 @@ function createEditPointFormTemplate(item) {
       <section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-          ${createCurrentOffers (point, pointOffers)};
+          ${createCurrentOffers (point, pointOffers)}
         </div>
       </section>
       <section class="event__section  event__section--destination">
@@ -130,27 +130,44 @@ function createEditPointFormTemplate(item) {
 }
 
 export default class EditPointView extends AbstractView {
-  // #point = null;
+  #point = null;
+  #pointDestinations = null;
+  #pointOffers = null;
+  #onResetClick = null;
+  #onSubmitClick = null;
 
-  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onResetClick}) {
+  constructor({point = POINT_EMPTY, pointDestinations, pointOffers, onResetClick, onSubmitClick}) {
     super();
-    this.point = point;
-    this.pointDestinations = pointDestinations;
-    this.pointOffers = pointOffers;
-    this.onResetClick = onResetClick;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.resetButtonClickHandler);
+    this.#point = point;
+    this.#pointDestinations = pointDestinations;
+    this.#pointOffers = pointOffers;
+    this.#onResetClick = onResetClick;
+    this.#onSubmitClick = onSubmitClick;
+
+    this.element
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#resetButtonClickHandler);
+
+    this.element
+      .querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
     return createEditPointFormTemplate({
-      point: this.point,
-      pointDestinations: this.pointDestinations,
-      pointOffers: this.pointOffers
+      point: this.#point,
+      pointDestinations: this.#pointDestinations,
+      pointOffers: this.#pointOffers
     });
   }
 
-  resetButtonClickHandler = (evt) => {
+  #resetButtonClickHandler = (evt) => {
     evt.preventDefault();
-    this.onResetClick();
+    this.#onResetClick();
+  };
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitClick();
   };
 }
