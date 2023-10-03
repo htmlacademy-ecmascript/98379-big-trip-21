@@ -2,7 +2,7 @@ import TripEventFiltersView from '../view/trip-filters.js';
 import {render, replace} from '../framework/render.js';
 import {filter} from '../utils/filter.js';
 
-export default class FilterPresentor {
+export default class FilterPresenter {
   #container = null;
   #filterComponent = null;
   #pointsModel = null;
