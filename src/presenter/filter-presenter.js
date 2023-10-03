@@ -1,33 +1,58 @@
-import HeaderFilters from '../view/header-time-filters-view.js';
+import TripEventFiltersView from '../view/trip-filters.js';
+import {render, replace} from '../framework/render.js';
+import {filter} from '../utils/filter.js';
 
-import {generateFilters} from '../mock/filter.js';
-import {render} from '../framework/render.js';
-
-export default class FilterPresenter {
+export default class FilterPresentor {
   #container = null;
-
+  #filterComponent = null;
   #pointsModel = null;
+  #filterModel = null;
 
-  #filters = [];
+  #currentFilter = null;
 
-  constructor({container, pointsModel}) {
+  constructor({container, pointsModel, filterModel}) {
     this.#container = container;
     this.#pointsModel = pointsModel;
+    this.#filterModel = filterModel;
+    this.#pointsModel.addObserver(this.#modelEventHandler);
+    this.#filterModel.addObserver(this.#modelEventHandler);
+  }
 
-    this.#filters = generateFilters(this.#pointsModel.get());
+  get filters() {
+    const points = this.#pointsModel.get();
 
-    // вариант с созвона
-    // this.#filters = Object.entries(filter)
-    // .map(([filterType, filterPoints], index) => ({
-    //   type: filterType,
-    //   isCheked: index === 0,
-    //   isDisabled: filterPoints(this.#pointsModel.get()).length === 0,
-    // }));
+    return Object.entries(filter)
+      .map(([filterType, filterPoints]) => ({
+        type: filterType,
+        hasPoints: filterPoints(points).length > 0
+      }));
   }
 
   init() {
-    render(new HeaderFilters(this.#filters), this.#container);
+    this.#currentFilter = this.#filterModel.get();
+    const prevFilterComponent = this.#filterComponent;
+
+    this.#filterComponent = new TripEventFiltersView({
+      filters: this.filters,
+      currentFilter: this.#currentFilter,
+      onFilterChange: this.#filterTypeChangeHandler
+    });
+
+    if(prevFilterComponent === null) {
+      render(this.#filterComponent, this.#container);
+    } else {
+      replace(this.#filterComponent, prevFilterComponent);
+    }
   }
+
+  #modelEventHandler = () => {
+    this.init();
+  };
+
+  #filterTypeChangeHandler = (filterType) => {
+    if(this.#filterModel.get() === filterType) {
+      return;
+    }
+    this.#filterModel.setFilter(filterType);
+  };
 }
-
-
