@@ -3,7 +3,7 @@ import {remove, render, RenderPosition} from '../framework/render.js';
 import {Mode, UserAction, UpdateType, EditType} from '../constants/constants.js';
 
 
-export default class NewPointPresentor {
+export default class NewPointPresenter {
   #container = null;
   #newPointComponent = null;
   #destinationsModel = null;
