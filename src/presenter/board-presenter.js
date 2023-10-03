@@ -1,12 +1,12 @@
 import TripEventListView from '../view/trip-events-list.js';
 import TripEventInfoView from '../view/trip-info.js';
 import TripEventSortView from '../view/trip-sort.js';
-import { remove, render, RenderPosition } from '../framework/render.js';
+import {remove, render, RenderPosition} from '../framework/render.js';
 import TripEventNoPointView from '../view/trip-no-point.js';
 import PointPresentor from './point-presentor.js';
-import { sort } from '../utils/sort.js';
-import { filter } from '../utils/filter.js';
-import { FilterTypes, SortTypes, UpdateType, UserAction } from '../constants/constants.js';
+import {sort} from '../utils/sort.js';
+import {filter} from '../utils/filter.js';
+import {FilterTypes, SortTypes, UpdateType, UserAction} from '../constants/constants.js';
 import NewPointPresentor from './new-point-presentor.js';
 import TripEventNewButton from '../view/trip-event-new-button.js';
 import TripEvevntMessageView from '../view/trip-event-message-view.js';
