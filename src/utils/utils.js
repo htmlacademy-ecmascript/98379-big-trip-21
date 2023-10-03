@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { DATA_TIME, DATA_NUMBER_MONTH, DATA_HOUR_MINUTE, MSEC_IN_DAY, MSEC_IN_HOUR, DAY_HOUR_MIN, HOUR_MIN, MIN } from '../constants/constants.js';
+import {DATA_TIME, DATA_NUMBER_MONTH, DATA_HOUR_MINUTE, MSEC_IN_DAY, MSEC_IN_HOUR, DAY_HOUR_MIN, HOUR_MIN, MIN} from '../constants/constants.js';
 
 import duration from 'dayjs/plugin/duration.js';
 dayjs.extend(duration);

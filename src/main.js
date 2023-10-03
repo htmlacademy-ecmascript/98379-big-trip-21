@@ -1,5 +1,5 @@
-import FilterPresentor from './presenter/filter-presenter.js';
-import BoardPresentor from './presenter/board-presenter.js';
+import FilterPresenter from './presenter/filter-presenter.js';
+import BoardPresenter from './presenter/board-presenter.js';
 import PointService from './service/point-api-service.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
@@ -11,8 +11,8 @@ const tripMainContainer = document.querySelector('.trip-main');
 const tripEventsContainer = document.querySelector('.trip-events');
 const tripFilterContainer = document.querySelector('.trip-controls__filters');
 
-const AVTORIZATION = 'Basic 45tdf89bg57hfuyfgb';
-const END_POINT = 'https://20.ecmascript.pages.academy/big-trip';
+const AVTORIZATION = 'Basic gS25fS4dwcl1s32j';
+const END_POINT = 'https://21.objects.pages.academy/big-trip';
 
 const pointApiService = new PointService(END_POINT, AVTORIZATION);
 
@@ -30,14 +30,14 @@ const pointsModel = new PointsModel({
 
 const filterModel = new FilterModel();
 
-const filterPresentor = new FilterPresentor({
+const filterPresenter = new FilterPresenter({
   container: tripFilterContainer,
   pointsModel,
   filterModel,
 
 });
 
-const boardPresentor = new BoardPresentor({
+const boardPresenter = new BoardPresenter({
   tripMainContainer,
   tripEventsContainer,
   destinationsModel,
@@ -47,5 +47,5 @@ const boardPresentor = new BoardPresentor({
 });
 
 pointsModel.init();
-filterPresentor.init();
-boardPresentor.init();
+filterPresenter.init();
+boardPresenter.init();
