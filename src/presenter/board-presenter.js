@@ -36,8 +36,8 @@ export default class BoardPresenter {
   #sortComponent = null;
   #currentSortType = SortTypes.DAY;
 
-  #pointPresentors = new Map();
-  #newPointPresentor = null;
+  #pointPresenters = new Map();
+  #newPointPresenter = null;
   #newPointButton = null;
   #isCreating = false;
   #messageComponent = null;
@@ -84,8 +84,8 @@ export default class BoardPresenter {
   }
 
   #clearBoard({ resetSortType = false } = {}) {
-    this.#pointPresentors.forEach((presentor) => presentor.destroy());
-    this.#pointPresentors.clear();
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
+    this.#pointPresenters.clear();
 
     remove(this.#tripEventNoPointComponent);
     remove(this.#messageComponent);
@@ -102,35 +102,35 @@ export default class BoardPresenter {
     this.#uiBlocker.block();
     switch (actonType) {
       case UserAction.UPDATE_POINT:
-        this.#pointPresentors.get(update.id).setSaving();
+        this.#pointPresenters.get(update.id).setSaving();
         try {
           await this.#pointsModel.updatePoint(updateType, update);
         } catch (err) {
-          this.#pointPresentors.get(update.id).setAborting();
+          this.#pointPresenters.get(update.id).setAborting();
           return Promise.reject();
         }
         break;
 
       case UserAction.ADD_POINT:
-        this.#newPointPresentor.setSaving();
+        this.#newPointPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, update);
         } catch (err) {
-          this.#newPointPresentor.setAborting();
+          this.#newPointPresenter.setAborting();
           this.#uiBlocker.unblock();
           return Promise.reject();
         }
         break;
 
       case UserAction.DELETE_POINT:
-        this.#pointPresentors.get(update.id).setDeleting();
+        this.#pointPresenters.get(update.id).setDeleting();
         try {
           await this.#pointsModel.deletePoint(updateType, update);
           if (this.points.length === 0) {
             this.#renderMessage();
           }
         } catch (err) {
-          this.#pointPresentors.get(update.id).setAborting();
+          this.#pointPresenters.get(update.id).setAborting();
         }
         break;
     }
@@ -141,7 +141,7 @@ export default class BoardPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#pointPresentors.get(data.id).init(data);
+        this.#pointPresenters.get(data.id).init(data);
         break;
 
       case UpdateType.MINOR:
@@ -225,15 +225,15 @@ export default class BoardPresenter {
 
   #renderPoints(points) {
     points.forEach((point) => {
-      const pointPresentor = new PointPresenter({
+      const pointPresenter = new PointPresenter({
         tripEventListComponent: this.#tripEventListComponent.element,
         destinationsModel: this.#destinationsModel,
         offersModel: this.#offersModel,
         onModeChange: this.#handleModeChange,
         onDataChange: this.#handleViewAction
       });
-      pointPresentor.init(point);
-      this.#pointPresentors.set(point.id, pointPresentor);
+      pointPresenter.init(point);
+      this.#pointPresenters.set(point.id, pointPresenter);
     });
   }
 
@@ -244,7 +244,7 @@ export default class BoardPresenter {
   }
 
   #renderNewPoint() {
-    this.#newPointPresentor = new NewPointPresenter({
+    this.#newPointPresenter = new NewPointPresenter({
       buttonContainer: this.#tripMainContainer,
       container: this.#tripEventListComponent.element,
       destinationsModel: this.#destinationsModel,
@@ -273,8 +273,8 @@ export default class BoardPresenter {
   };
 
   #handleModeChange = () => {
-    this.#pointPresentors.forEach((presentor) => presentor.resetView());
-    this.#newPointPresentor.destroy();
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+    this.#newPointPresenter.destroy();
   };
 
   #newPointButtonClickHandler = () => {
@@ -282,7 +282,7 @@ export default class BoardPresenter {
     this.#currentSortType = SortTypes.DAY;
     this.#filterModel.setFilter(FilterTypes.EVERYTHING);
     this.#newPointButton.setDisabled(true);
-    this.#newPointPresentor.init();
+    this.#newPointPresenter.init();
     remove(this.#messageComponent);
   };
 
