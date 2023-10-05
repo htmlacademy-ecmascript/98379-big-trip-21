@@ -30,10 +30,10 @@ function createEventSortItem(currentSortType, sortItem) {
   );
 }
 
-function createEventSortTemplate(currentSortType,sortMap) {
+function createEventSortTemplate(currentSortType,sortMaps) {
   return (/*html*/ `
   <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    ${sortMap.map((sortItem) => createEventSortItem(currentSortType,sortItem)).join('')}
+    ${sortMaps.map((sortItem) => createEventSortItem(currentSortType,sortItem)).join('')}
   </form>`);
 }
 
@@ -50,13 +50,13 @@ function createSortMap(sortType) {
 
 export default class TripEventSortView extends AbstractView{
   #currentSortType = null;
-  #sortMap = null;
+  #sortMaps = null;
   #handleSortTypeChange = null;
 
   constructor({currentSortType, sortType, onSortTypeChange}) {
     super();
 
-    this.#sortMap = createSortMap (sortType);
+    this.#sortMaps = createSortMap (sortType);
     this.#currentSortType = currentSortType;
 
     this.#handleSortTypeChange = onSortTypeChange;
@@ -64,7 +64,7 @@ export default class TripEventSortView extends AbstractView{
   }
 
   get template() {
-    return createEventSortTemplate(this.#currentSortType, this.#sortMap);
+    return createEventSortTemplate(this.#currentSortType, this.#sortMaps);
   }
 
   #sortTypeChangeHandler = (evt) => {
