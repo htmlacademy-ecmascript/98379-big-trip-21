@@ -1,4 +1,4 @@
-import TripEventInfoView from '../view/trip-info.js';
+import TripEventInfoView from '../view/trip-info-view.js';
 import {RenderPosition, render, remove, replace} from '../framework/render.js';
 
 export default class TripInfoPresenter {
